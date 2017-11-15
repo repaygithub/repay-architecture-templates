@@ -1,0 +1,191 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Metadata": {
+        "AWS::CloudFormation::Designer": {
+            "99d03e4b-ad8c-4178-a242-84c58f0b7835": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 60,
+                    "y": 90
+                },
+                "z": 1,
+                "embeds": []
+            },
+            "cb404ce3-0259-4d34-bb89-7cfa3ea0afd0": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 180,
+                    "y": 90
+                },
+                "z": 1,
+                "embeds": [],
+                "isassociatedwith": [
+                    "99d03e4b-ad8c-4178-a242-84c58f0b7835"
+                ]
+            }
+        }
+    },
+    "Resources": {
+        "AssumeRepayLimitedAccessPublishSnsRole": {
+            "Type": "AWS::IAM::ManagedPolicy",
+            "Properties": {
+                "Description": "String",
+                "Path": {
+                    "Ref": "PolicyPath"
+                },
+                "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Sid": "Stmt1510609405663",
+                            "Action": [
+                                "sns:ListTopics",
+                                "sns:Publish"
+                            ],
+                            "Effect": "Allow",
+                            "Resource": {
+                                "Ref": "SnsArns"
+                            }
+                        }
+                    ]
+                },
+                "Roles": [
+                    {
+                        "Ref": "RepayLimitedAccessPublishSnsRole"
+                    }
+                ],
+                "ManagedPolicyName": {
+                    "Ref": "PolicyName"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "cb404ce3-0259-4d34-bb89-7cfa3ea0afd0"
+                }
+            }
+        },
+        "RepayLimitedAccessPublishSnsRole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "RoleName": {
+                    "Ref": "RoleName"
+                },
+                "Path": {
+                    "Ref": "RolePath"
+                },
+                "AssumeRolePolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Sid": "Stmt1510609405663",
+                            "Action": [
+                                "sts:AssumeRole"
+                            ],
+                            "Effect": "Allow",
+                            "Condition": {
+                                "StringEquals": {
+                                    "sts:ExternalId": {
+                                        "Ref": "RepayExternalIDName"
+                                    }
+                                }
+                            },
+                            "Principal": {
+                                "AWS": {
+                                    "Fn::Join": [
+                                        "",
+                                        [
+                                            "arn:aws:iam::",
+                                            {
+                                                "Ref": "RepayAccount"
+                                            },
+                                            ":root"
+                                        ]
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "99d03e4b-ad8c-4178-a242-84c58f0b7835"
+                }
+            }
+        }
+    },
+    "Parameters": {
+        "SnsArns": {
+            "Type": "CommaDelimitedList",
+            "Description": "Comma seperated list of arns to SNS topics you'd like Repay to be able to publish to aby assuming the role in this CF stack."
+        },
+        "RepayAccount": {
+            "Type": "String",
+            "Description": "account number to serve as the principal of aws policies in this stack. Principals are allowed entities. This sets REPAY's account as allowed to assume this role."
+        },
+        "RepayExternalIDName": {
+            "Type": "String",
+            "Description": "This is an external ID that is required to make the policy between accounts secure. Recommended would be Repay and then a random string added to it. You can replace the RandomStringHere portion with a random string to keep it hard to guess. It needs to be shared with Repay after this is created.",
+            "Default": "Repay-RandomStringHere"
+        },
+        "PolicyName": {
+            "Type": "String",
+            "Default": "AssumeRepayLimitedAccessPublishSnsRole",
+            "Description": "The name of the policy"
+        },
+        "PolicyPath": {
+            "Type": "String",
+            "Default": "/",
+            "Description": "Read the AWS Docs on \"AWS Documentation » AWS Identity and Access Management » User Guide » Reference Information for AWS Identity and Access Management » IAM Identifiers\". This allows you to specify what path to put the policy in. Leave \"/\" for no path. If you're not sure what this is, you probably can just leave it blank."
+        },
+        "RoleName": {
+            "Type": "String",
+            "Default": "RepayLimitedAccessPublishSnsRole",
+            "Description": "The name of the role"
+        },
+        "RolePath": {
+            "Type": "String",
+            "Default": "/",
+            "Description": "Same concept as PolicyPath but for role"
+        }
+    },
+    "Outputs": {
+        "RepayExternalID": {
+            "Value": {
+                "Ref": "RepayExternalIDName"
+            },
+            "Description": "REPAY will need to use this external ID to validate identity. Please share this with REPAY to allow access to this role."
+        },
+        "RoleArn": {
+            "Value": {
+                "Fn::Join": [
+                    "",
+                    [
+                        "arn:aws:iam::082836123308:role/",
+                        {
+                            "Ref": "RepayLimitedAccessPublishSnsRole"
+                        }
+                    ]
+                ]
+            },
+            "Description": "REPAY will need to use this Role Arn to assume the role. Please share this with REPAY to allow access to this role."
+        },
+        "SnsArnList": {
+            "Value": {
+                "Fn::Join": [
+                    ",",
+                    {
+                        "Ref": "SnsArns"
+                    }
+                ]
+            },
+            "Description": "REPAY will need to know the ARNs of the SNS topics to be shared. Please share this with REPAY."
+        }
+    }
+}
