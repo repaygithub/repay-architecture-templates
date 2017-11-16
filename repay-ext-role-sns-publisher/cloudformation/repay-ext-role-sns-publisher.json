@@ -45,7 +45,6 @@
                         {
                             "Sid": "Stmt1510609405663",
                             "Action": [
-                                "sns:ListTopics",
                                 "sns:Publish"
                             ],
                             "Effect": "Allow",
