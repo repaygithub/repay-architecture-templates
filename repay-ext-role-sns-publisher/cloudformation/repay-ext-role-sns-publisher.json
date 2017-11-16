@@ -136,7 +136,7 @@
         "PolicyPath": {
             "Type": "String",
             "Default": "/",
-            "Description": "Read the AWS Docs on \"AWS Documentation >> AWS Identity and Access Management >> User Guide >> Reference Information for AWS Identity and Access Management >> IAM Identifiers\". This allows you to specify what path to put the policy in. Leave \"/\" for no path. If you're not sure what this is, you probably can just leave it blank."
+            "Description": "Read the AWS Docs on \"AWS Documentation >> AWS Identity and Access Management >> User Guide >> Reference Information for AWS Identity and Access Management >> IAM Identifiers\". This allows you to specify what path to put the policy in. Leave \"/\" for no path. If you're not sure what this is, you probably can just leave it \"/\"; which is the aws default path."
         },
         "RoleName": {
             "Type": "String",
