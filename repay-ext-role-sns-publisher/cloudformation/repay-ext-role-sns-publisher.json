@@ -101,9 +101,7 @@
                                         "",
                                         [
                                             "arn:aws:iam::",
-                                            {
-                                                "Ref": "RepayAccount"
-                                            },
+                                            "502122972617",
                                             ":root"
                                         ]
                                     ]
@@ -125,10 +123,6 @@
             "Type": "CommaDelimitedList",
             "Description": "Comma seperated list of arns to SNS topics you'd like Repay to be able to publish to aby assuming the role in this CF stack."
         },
-        "RepayAccount": {
-            "Type": "String",
-            "Description": "account number to serve as the principal of aws policies in this stack. Principals are allowed entities. This sets REPAY's account as allowed to assume this role."
-        },
         "RepayExternalIDName": {
             "Type": "String",
             "Description": "This is an external ID that is required to make the policy between accounts secure. Recommended would be Repay and then a random string added to it. You can replace the RandomStringHere portion with a random string to keep it hard to guess. It needs to be shared with Repay after this is created.",
@@ -142,7 +136,7 @@
         "PolicyPath": {
             "Type": "String",
             "Default": "/",
-            "Description": "Read the AWS Docs on \"AWS Documentation » AWS Identity and Access Management » User Guide » Reference Information for AWS Identity and Access Management » IAM Identifiers\". This allows you to specify what path to put the policy in. Leave \"/\" for no path. If you're not sure what this is, you probably can just leave it blank."
+            "Description": "Read the AWS Docs on \"AWS Documentation >> AWS Identity and Access Management >> User Guide >> Reference Information for AWS Identity and Access Management >> IAM Identifiers\". This allows you to specify what path to put the policy in. Leave \"/\" for no path. If you're not sure what this is, you probably can just leave it blank."
         },
         "RoleName": {
             "Type": "String",
